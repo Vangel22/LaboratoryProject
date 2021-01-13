@@ -1,0 +1,108 @@
+<th:block xmlns:th="http://www.thymeleaf.org">
+    <div class="jumbotron text-center">
+        <h1>The No.1 balloon shop</h1>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-md-10">
+                <div class="row" th:if="${balloons.size() != 0}">
+                    <form class="form-inline mx-1" action="/balloons" method="GET">
+                        <div class="form-group">
+                            <select id="typeToSort" name="filterBy" class="form-control">
+                                <option
+                                        th:each="type : ${allTypes}"
+                                        th:text="${type}"
+                                        th:value="${type}">
+                                </option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary mx-2" type="submit"><i class="fas fa-filter"></i> Filter</button>
+
+                    </form>
+
+                    <form action="/balloons/find" class="form-inline mx-1" th:method="post">
+                        <div class="form-group">
+                            <input id="text" name="text" type="text">
+                        </div>
+
+
+                        <button class="btn btn-primary mx-2" type="submit">Search</button>
+                    </form>
+
+                    <a class="btn btn-danger" href="/balloons" type="submit"><i class="fas fa-eraser"></i> Clear</a>
+
+                </div>
+
+                <div class="row" th:if="${hasError}">
+                    <div th:text="${error}" class="text-danger"></div>
+                </div>
+                <br>
+                <div class="row table-responsive" th:if="${balloons.size() != 0}">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Balloon Name</th>
+                            <th scope="col">Balloon Type</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Manufacturer</th>
+                            <th:block sec:authorize="isAuthenticated()">
+                                <th scope="col">Actions</th>
+                            </th:block>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr class="balloon-row" th:each="balloon : ${balloons}">
+                            <td th:text="${balloon.getName()}"></td>
+                            <td th:text="${balloon.getType()}"></td>
+                            <td th:text="${balloon.getDescription()}"></td>
+                            <td th:text="${balloon.getManufacturer().getName()}"></td>
+                            <th:block sec:authorize="isAuthenticated()">
+                                <td class="text-right">
+                                    <div class="container">
+                                        <div class="row">
+
+                                            <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                                                <form class="px-2"
+                                                      th:action="@{/balloons/delete/{id} (id=${balloon.getId()})}"
+                                                      th:method="get">
+                                                    <button class="btn btn-sm btn-danger delete-balloon" type="submit">
+                                                        <i class="fas fa-trash"></i> Delete
+                                                    </button>
+                                                </form>
+                                            </th:block>
+
+                                            <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                                                <a class="px-2 btn btn-sm btn-primary edit-balloon"
+                                                   th:href="@{'/balloons/edit-form/{id}' (id=${balloon.getId()})}"> <i
+                                                        class="fas fa-edit"></i> Edit
+                                                </a>
+                                            </th:block>
+
+                                            <th:block sec:authorize="isAuthenticated()">
+                                                <form class="px-2"
+                                                      th:action="@{'/shopping-cart/add-balloon/{id}' (id=${balloon.getId()})}"
+                                                      th:method="post">
+                                                    <button class="btn btn-sm btn-success add-to-cart-balloon"
+                                                            type="submit">
+                                                        <i class="fas fa-cart-plus"></i> Add to cart
+                                                    </button>
+                                                </form>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                </td>
+                            </th:block>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="alert alert-primary" role="alert" th:if="${balloons.size() == 0}">
+                    Currently, there aren't any balloons offered in the shop.
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>

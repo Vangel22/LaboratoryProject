@@ -1,0 +1,64 @@
+<th:block xmlns:th="http://www.thymeleaf.org">
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h3 class="jumbotron-heading">Shopping cart for
+                <th:block th:if="${#request.getRemoteUser() != null}"
+                          th:text="${#request.getRemoteUser()}"></th:block>
+            </h3>
+        </div>
+    </section>
+
+    <div th:if="${hasError}">
+        <h5 class="text-center text-danger" th:text="${error}"></h5>
+    </div>
+
+    <div class="container mb-4">
+        <div class="row">
+            <div class="col-12" th:if="${balloons.size() > 0}">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Manufacturer</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="balloon : ${balloons}">
+                            <td th:text="${balloon.getName()}"></td>
+                            <td th:text="${balloon.getDescription()}"></td>
+                            <td th:text="${balloon.getManufacturer() != null} ? ${balloon.getManufacturer().getName()} : 'No Manufacturer'"></td>
+                            <td th:text="${balloon.getType() != null} ? ${balloon.getType().name()} : 'No Type'"></td>
+                            <td class="text-left">
+                                <form class="px-2" th:method="post"
+                                      th:action="@{/shopping-cart/remove-balloon/{id} (id=${balloon.getId()})}">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col mb-3">
+                    <div class="row">
+                        <div class="col-sm 12 col-md-12">
+                            <a href="/order/place" class="btn btn-block btn-dark">Place Order</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12" th:if="${balloons.size() == 0}">
+                Your shopping cart is empty.
+
+                <a href="/balloons" class="btn btn-success">Shop for balloons</a>
+            </div>
+        </div>
+    </div>
+</th:block>

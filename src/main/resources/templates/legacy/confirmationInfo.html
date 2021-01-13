@@ -1,0 +1,76 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:td="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>WP lab - Confirmation Info</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+        }
+
+        /*table {*/
+        /*    width: 100%;*/
+        /*}*/
+
+        /*table, td, th {*/
+        /*    border: 1px solid black;*/
+        /*    padding: 3px 2px;*/
+        /*}*/
+    </style>
+</head>
+<body>
+<section>
+    <div class="jumbotron">
+        <h1>Balloon Order page - Order confirmation </h1>
+    </div>
+    <table class="table">
+        <tr>
+            <th colspan="2">
+                Your Order Status
+            </th>
+        </tr>
+        <tr>
+            <td><b>Client Name </b></td>
+            <td><span th:text="${session.clientName}"></span></td>
+        </tr>
+        <tr>
+            <td><b>Client Address </b></td>
+            <td><span th:text="${session.deliveryAddress}"></span></td>
+        </tr>
+        <tr>
+            <td><b>Client IP Address</b></td>
+            <td><span th:text="${ipAddress}"></span></td>
+        </tr>
+        <tr>
+            <td><b>Client Browser</b></td>
+            <td><span th:text="${clientAgent}"></span></td>
+        </tr>
+        <tr>
+            <td><b>Balloon Color </b></td>
+            <td><span th:text="${session.color}"></span></td>
+        </tr>
+        <tr>
+            <td><b>Balloon Size </b></td>
+            <td><span th:text="${session.size}"></span></td>
+        </tr>
+    </table>
+    <div>
+
+<!--        balloonColor, balloonSize, clientName, address-->
+        '/orders/place?balloonColor='+${session.color}'?balloonSize=' + ${session.balloonSize}' ?clientName=${session.clientName}?address=${session.deliveryAddress}'
+
+<!--        <a class="btn btn-danger" th:href="/orders/place?balloonColor=${session.color}?balloonSize=${session.balloonSize}?clientName=${session.clientName}?address=${session.deliveryAddress}">Log out</a>-->
+        <a class="btn btn-danger" th:href="/orders/place?balloonColor=${session.color}?balloonSize=${session.balloonSize}?clientName=${session.clientName}?address=${session.deliveryAddress}">Place order</a>
+    </div>
+
+    <div>
+        <a class="btn btn-danger" href="/logout">Log out</a>
+    </div>
+
+
+</section>
+<div th:replace="fragments/footer :: footer">...</div>
+</body>
+
+</html>
